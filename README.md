@@ -33,3 +33,6 @@
 
 ---
 ✨ *Actively building smart contracts on Move and open to bounties, grants, and collaborations.*
+
+![Move CI](https://github.com/root28root/move-projects/actions/workflows/move-ci.yml/badge.svg)
+
