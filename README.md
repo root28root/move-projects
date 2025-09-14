@@ -1,51 +1,35 @@
-# 🚀 Move Projects Portfolio
+# 👋 Hi, I'm [Твоё имя или ник]
 
-Welcome to my **Move (Sui & Aptos)** development lab.  
-Here I am learning and building smart contracts, step by step.  
-This repository will contain my practice projects and portfolio.
+🚀 **Move Developer (Sui & Aptos)**  
+🔹 Focused on Web3, DeFi, and blockchain infrastructure  
+🔹 Building smart contracts and dApps with Move language  
+🔹 Currently developing a portfolio of practical projects  
 
 ---
 
-## 📂 Projects
+## 📂 Current Projects
+- **MyToken** — basic token contract with mint/transfer/burn  
+- **Escrow** — deposit & release logic (secure transactions)  
+- **SimpleNFT** — NFT minting and transfer with events  
+- **MiniMarketplace** — listing & buying assets with fees  
 
-### 1. MyToken
-- A simple token implementation with `mint`, `transfer`, and `burn` functions.  
-- Unit tests included.  
-- Goal: learn resource model and basic ownership in Move.  
-
-### 2. Escrow (coming soon)
-- Escrow contract with deposit, release, and refund logic.  
-- Will include state machine diagram and negative test cases.  
-
-### 3. SimpleNFT (planned)
-- NFT minting and transfer contract.  
-- Events for creation and transfers.  
-
-### 4. MiniMarketplace (planned)
-- Basic marketplace for listing and buying tokens or NFTs.  
-- Includes commission logic and multi-step integration tests.  
+👉 All projects with code and tests: [Move Projects Repo](https://github.com/yourusername/move-projects)
 
 ---
 
 ## 🛠 Tech Stack
-- **Move Language** (Sui & Aptos)  
-- **Rust** (toolchain for Move compiler)  
-- **Sui CLI / Aptos CLI**  
-- **VS Code + Move plugin**  
-- **Git / GitHub** for version control  
+- Move (Sui / Aptos)
+- Rust basics
+- Git & GitHub
+- Smart contracts design
+- Testing & documentation
 
 ---
 
-## 🎯 Learning Goals
-- Understand the **resource-oriented model** in Move.  
-- Learn to design **secure smart contracts**.  
-- Build a portfolio to apply for **bounties, grants, and jobs** in Web3.  
+## 🎯 Goals
+- Deliver production-ready smart contracts on Move  
+- Contribute to Sui & Aptos ecosystem (bounties, grants, collaborations)  
+- Build a strong portfolio of real-world dApps  
 
 ---
-
-## 🌐 Connect
-- GitHub: https://github.com/root28root
-
----
-
-📌 *This repository is part of my journey to become a professional Move developer.*
+✨ *Actively building smart contracts on Move and open to bounties, grants, and collaborations.*
