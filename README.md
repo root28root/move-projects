@@ -1,4 +1,4 @@
-# 👋 Hi, I'm [Твоё имя или ник]
+# 👋 Hi, I'm Rootmhz
 
 🚀 **Move Developer (Sui & Aptos)**  
 🔹 Focused on Web3, DeFi, and blockchain infrastructure  
