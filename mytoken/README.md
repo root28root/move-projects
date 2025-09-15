@@ -13,10 +13,7 @@ This project demonstrates the basics of the resource-oriented model in Move.
 
 ---
 
-## 🛠 How to build
+## Build & Test
 ```bash
 sui move build
-
-## How to test
-```bash
 sui move test
