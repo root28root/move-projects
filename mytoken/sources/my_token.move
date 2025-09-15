@@ -1,5 +1,5 @@
 module MyToken::coin {
-    use 0x1::signer;
+    use std::signer;
 
     /// Simple in-memory coin (educational)
     struct Coin has store { value: u64 }
@@ -10,9 +10,7 @@ module MyToken::coin {
         Coin { value: amount }
     }
 
-    public fun balance(coin: &Coin): u64 {
-        coin.value
-    }
+    public fun balance(coin: &Coin): u64 { coin.value }
 
     public fun transfer(from: &mut Coin, amount: u64): Coin {
         assert!(from.value >= amount, EINSUFFICIENT_BALANCE);
