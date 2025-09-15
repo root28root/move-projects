@@ -1,23 +1,12 @@
 module SimpleNFT::nft {
--    use std::signer;
--    use std::vector;
--    use std::string;
-+    use 0x1::signer;
-+    use 0x1::vector;
-+    use 0x1::string;
-
+use 0x1::signer;
+use 0x1::vector;
+use 0x1::string;
 
     /// Примитивный NFT (без рыночной логики)
-    struct NFT has key {
-        id: u64,
-        name: string::String,
-        owner: address,
-    }
-
-    struct Registry has key {
-        next_id: u64,
-        items: vector<NFT>,
-    }
+    struct NFT has store { id: u64, name: string::String, owner: address }
+        
+    struct Registry has store { next_id: u64, items: vector<NFT> }  
 
     public fun new_registry(_admin: &signer): Registry {
         Registry { next_id: 0, items: vector::empty<NFT>() }
