@@ -1,11 +1,6 @@
 module Escrow::escrow {
--    use std::error;
--    use std::signer;
-+    use 0x1::error;
-+    use 0x1::signer;
+    use 0x1::signer;
 
-
-    /// Ошибки
     const E_ALREADY_FUNDED: u64 = 1;
     const E_NOT_FUNDED: u64   = 2;
     const E_COMPLETED: u64    = 3;
@@ -13,12 +8,10 @@ module Escrow::escrow {
     const E_NOT_BUYER: u64    = 5;
     const E_NOT_SELLER: u64   = 6;
 
-    /// Простейший "кошелёк" для демонстрации логики (учебная модель)
-    struct Wallet has store { balance: u64 }
+    struct Wallet has store {
         balance: u64,
     }
 
-    /// Сделка-эскроу
     struct Deal has store {
         buyer: address,
         seller: address,
