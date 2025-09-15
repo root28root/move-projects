@@ -1,6 +1,8 @@
 module MyToken::coin {
-    use std::error;
-    use std::signer;
+-    use std::error;
+-    use std::signer;
++    use 0x1::error;
++    use 0x1::signer;
 
     /// Resource that represents a simple token
     struct Coin has key {
