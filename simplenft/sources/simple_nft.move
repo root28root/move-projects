@@ -1,50 +1,22 @@
 module SimpleNFT::nft {
-    use std::signer;
-    use std::vector;
-    use std::string;
-
-    /// Minimal NFT (educational)
+    /// Minimal NFT without strings/vectors/signers
     struct NFT has store {
         id: u64,
-        name: string::String,
         owner: address,
     }
 
-    struct Registry has store {
-        next_id: u64,
-        items: vector<NFT>,
+    /// Mint an NFT to owner with id
+    public fun mint(id: u64, owner: address): NFT {
+        NFT { id, owner }
     }
 
-    public fun new_registry(_admin: &signer): Registry {
-        Registry { next_id: 0, items: vector::empty<NFT>() }
+    /// Transfer ownership
+    public fun transfer(n: &mut NFT, to: address) {
+        n.owner = to;
     }
 
-    public fun mint(admin: &signer, r: &mut Registry, to: address, name: string::String) {
-        let id = r.next_id;
-        r.next_id = id + 1;
-        let nft = NFT { id, name, owner: to };
-        vector::push_back(&mut r.items, nft);
-    }
-
-    public fun transfer(_caller: &signer, r: &mut Registry, id: u64, to: address) {
-        let i = find_index(&r.items, id);
-        let mut nft = vector::borrow_mut(&mut r.items, i);
-        nft.owner = to;
-    }
-
-    public fun get_owner(r: &Registry, id: u64): address {
-        let i = find_index(&r.items, id);
-        let nft = vector::borrow(&r.items, i);
-        nft.owner
-    }
-
-    fun find_index(items: &vector<NFT>, id: u64): u64 {
-        let mut i = 0;
-        while (i < vector::length(items)) {
-            let nft_ref = vector::borrow(items, i);
-            if (nft_ref.id == id) return i;
-            i = i + 1;
-        };
-        0
+    /// Read owner
+    public fun owner_of(n: &NFT): address {
+        n.owner
     }
 }
