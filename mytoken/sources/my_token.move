@@ -1,25 +1,27 @@
 module MyToken::coin {
-    use std::signer;
-
-    /// Simple in-memory coin (educational)
+    /// Minimal in-memory coin (no std imports)
     struct Coin has store { value: u64 }
 
     const EINSUFFICIENT_BALANCE: u64 = 1;
 
-    public fun mint(_owner: &signer, amount: u64): Coin {
+    /// Mint new tokens
+    public fun mint(amount: u64): Coin {
         Coin { value: amount }
     }
 
-    public fun balance(coin: &Coin): u64 { coin.value }
+    /// Read balance
+    public fun balance(c: &Coin): u64 { c.value }
 
+    /// Split amount from coin into a new coin
     public fun transfer(from: &mut Coin, amount: u64): Coin {
         assert!(from.value >= amount, EINSUFFICIENT_BALANCE);
         from.value = from.value - amount;
         Coin { value: amount }
     }
 
-    public fun burn(coin: Coin): u64 {
-        let amount = coin.value;
-        amount
+    /// Burn coin and return amount
+    public fun burn(c: Coin): u64 {
+        let v = c.value;
+        v
     }
 }
