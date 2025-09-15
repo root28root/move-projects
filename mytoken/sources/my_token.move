@@ -1,13 +1,9 @@
 module MyToken::coin {
--    use std::error;
--    use std::signer;
-+    use 0x1::error;
-+    use 0x1::signer;
+
+use 0x1::signer;
 
     /// Resource that represents a simple token
-    struct Coin has store {
-    value: u64,
-}
+    struct Coin has store { value: u64 }
 
     const EINSUFFICIENT_BALANCE: u64 = 1;
 
