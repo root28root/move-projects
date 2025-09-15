@@ -52,4 +52,14 @@ module Escrow::escrow {
         bw.balance = bw.balance + d.amount;
         d.completed = true;
     }
+public entry fun entry_demo(_s: &signer) {
+    let bw = new_wallet();
+    let sw = new_wallet();
+    deposit(&mut bw, 150);
+    let d = create(@0x1, @0x2, 100);
+    fund(@0x1, &mut bw, &mut d);
+    release(@0x2, &mut sw, &mut d);
+    assert!(balance(&bw) == 50, 0);
+    assert!(balance(&sw) == 100, 1);
+}
 }
