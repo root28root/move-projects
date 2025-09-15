@@ -1,6 +1,7 @@
 module Escrow::escrow {
     use 0x1::signer;
 
+    /// Error codes
     const E_ALREADY_FUNDED: u64 = 1;
     const E_NOT_FUNDED: u64   = 2;
     const E_COMPLETED: u64    = 3;
@@ -8,10 +9,12 @@ module Escrow::escrow {
     const E_NOT_BUYER: u64    = 5;
     const E_NOT_SELLER: u64   = 6;
 
+    /// Simple "wallet" resource for demo/tests (no global storage)
     struct Wallet has store {
         balance: u64,
     }
 
+    /// Deal state kept in-memory for demo
     struct Deal has store {
         buyer: address,
         seller: address,
@@ -20,22 +23,22 @@ module Escrow::escrow {
         completed: bool,
     }
 
-    /// Создать кошелёк (баланс = 0)
+    /// Create empty wallet
     public fun new_wallet(_owner: &signer): Wallet {
         Wallet { balance: 0 }
     }
 
-    /// Пополнить кошелёк (утилита для тестов/демо)
+    /// Deposit to wallet (demo helper)
     public fun deposit(_owner: &signer, w: &mut Wallet, amount: u64) {
         w.balance = w.balance + amount;
     }
 
-    /// Баланс кошелька
+    /// Wallet balance
     public fun balance(w: &Wallet): u64 {
         w.balance
     }
 
-    /// Создать сделку (задаём продавца и сумму)
+    /// Create deal (buyer defines seller and amount)
     public fun create(buyer: &signer, seller: address, amount: u64): Deal {
         Deal {
             buyer: signer::address_of(buyer),
@@ -46,7 +49,7 @@ module Escrow::escrow {
         }
     }
 
-    /// Фандинг сделки (покупатель вносит сумму в эскроу)
+    /// Buyer funds the deal (escrow)
     public fun fund(buyer: &signer, buyer_wallet: &mut Wallet, d: &mut Deal) {
         assert!(signer::address_of(buyer) == d.buyer, E_NOT_BUYER);
         assert!(!d.funded, E_ALREADY_FUNDED);
@@ -55,16 +58,16 @@ module Escrow::escrow {
         d.funded = true;
     }
 
-    /// Выплата продавцу (выпуск средств из эскроу)
+    /// Release funds to seller
     public fun release(seller: &signer, seller_wallet: &mut Wallet, d: &mut Deal) {
-    assert!(signer::address_of(seller) == d.seller, E_NOT_SELLER);
-    assert!(d.funded, E_NOT_FUNDED);          // ДОЛЖНО быть funded = true
-    assert!(!d.completed, E_COMPLETED);
-    seller_wallet.balance = seller_wallet.balance + d.amount;
-    d.completed = true;
-}
+        assert!(signer::address_of(seller) == d.seller, E_NOT_SELLER);
+        assert!(d.funded, E_NOT_FUNDED);
+        assert!(!d.completed, E_COMPLETED);
+        seller_wallet.balance = seller_wallet.balance + d.amount;
+        d.completed = true;
+    }
 
-    /// Возврат покупателю (рефанд)
+    /// Refund to buyer
     public fun refund(buyer: &signer, buyer_wallet: &mut Wallet, d: &mut Deal) {
         assert!(signer::address_of(buyer) == d.buyer, E_NOT_BUYER);
         assert!(d.funded, E_NOT_FUNDED);
