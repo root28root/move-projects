@@ -1,5 +1,5 @@
 module Escrow::escrow {
-    use 0x1::signer;
+    use std::signer;
 
     /// Error codes
     const E_ALREADY_FUNDED: u64 = 1;
@@ -9,10 +9,8 @@ module Escrow::escrow {
     const E_NOT_BUYER: u64    = 5;
     const E_NOT_SELLER: u64   = 6;
 
-    /// Simple "wallet" resource for demo/tests (no global storage)
-    struct Wallet has store {
-        balance: u64,
-    }
+    /// Simple wallet resource for demo/tests (no global storage)
+    struct Wallet has store { balance: u64 }
 
     /// Deal state kept in-memory for demo
     struct Deal has store {
@@ -23,22 +21,14 @@ module Escrow::escrow {
         completed: bool,
     }
 
-    /// Create empty wallet
-    public fun new_wallet(_owner: &signer): Wallet {
-        Wallet { balance: 0 }
-    }
+    public fun new_wallet(_owner: &signer): Wallet { Wallet { balance: 0 } }
 
-    /// Deposit to wallet (demo helper)
     public fun deposit(_owner: &signer, w: &mut Wallet, amount: u64) {
         w.balance = w.balance + amount;
     }
 
-    /// Wallet balance
-    public fun balance(w: &Wallet): u64 {
-        w.balance
-    }
+    public fun balance(w: &Wallet): u64 { w.balance }
 
-    /// Create deal (buyer defines seller and amount)
     public fun create(buyer: &signer, seller: address, amount: u64): Deal {
         Deal {
             buyer: signer::address_of(buyer),
@@ -49,7 +39,6 @@ module Escrow::escrow {
         }
     }
 
-    /// Buyer funds the deal (escrow)
     public fun fund(buyer: &signer, buyer_wallet: &mut Wallet, d: &mut Deal) {
         assert!(signer::address_of(buyer) == d.buyer, E_NOT_BUYER);
         assert!(!d.funded, E_ALREADY_FUNDED);
@@ -58,7 +47,6 @@ module Escrow::escrow {
         d.funded = true;
     }
 
-    /// Release funds to seller
     public fun release(seller: &signer, seller_wallet: &mut Wallet, d: &mut Deal) {
         assert!(signer::address_of(seller) == d.seller, E_NOT_SELLER);
         assert!(d.funded, E_NOT_FUNDED);
@@ -67,7 +55,6 @@ module Escrow::escrow {
         d.completed = true;
     }
 
-    /// Refund to buyer
     public fun refund(buyer: &signer, buyer_wallet: &mut Wallet, d: &mut Deal) {
         assert!(signer::address_of(buyer) == d.buyer, E_NOT_BUYER);
         assert!(d.funded, E_NOT_FUNDED);
