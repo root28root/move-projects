@@ -24,4 +24,12 @@ public fun burn(c: Coin): u64 {
     let Coin { value: v } = c;
     v
 }
+public entry fun entry_demo(_sender: &signer) {
+    let c = mint(100);
+    let part = transfer(&mut c, 40);
+    let burned_part = burn(part);
+    let burned_rest = burn(c);
+    assert!(burned_part + burned_rest == 100, 0);
+}
+
 }
