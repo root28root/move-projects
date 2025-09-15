@@ -1,12 +1,19 @@
 module SimpleNFT::nft {
-use 0x1::signer;
-use 0x1::vector;
-use 0x1::string;
+    use std::signer;
+    use std::vector;
+    use std::string;
 
-    /// Примитивный NFT (без рыночной логики)
-    struct NFT has store { id: u64, name: string::String, owner: address }
-        
-    struct Registry has store { next_id: u64, items: vector<NFT> }  
+    /// Minimal NFT (educational)
+    struct NFT has store {
+        id: u64,
+        name: string::String,
+        owner: address,
+    }
+
+    struct Registry has store {
+        next_id: u64,
+        items: vector<NFT>,
+    }
 
     public fun new_registry(_admin: &signer): Registry {
         Registry { next_id: 0, items: vector::empty<NFT>() }
@@ -20,7 +27,6 @@ use 0x1::string;
     }
 
     public fun transfer(_caller: &signer, r: &mut Registry, id: u64, to: address) {
-        let len = vector::length(&r.items);
         let i = find_index(&r.items, id);
         let mut nft = vector::borrow_mut(&mut r.items, i);
         nft.owner = to;
@@ -33,13 +39,12 @@ use 0x1::string;
     }
 
     fun find_index(items: &vector<NFT>, id: u64): u64 {
-        let i = 0;
+        let mut i = 0;
         while (i < vector::length(items)) {
             let nft_ref = vector::borrow(items, i);
             if (nft_ref.id == id) return i;
             i = i + 1;
         };
-        // если не нашли — для учебного проекта просто вернём 0
         0
     }
 }
