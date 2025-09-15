@@ -20,8 +20,8 @@ module MyToken::coin {
     }
 
     /// Burn coin and return amount
-    public fun burn(c: Coin): u64 {
-        let v = c.value;
-        v
-    }
+public fun burn(c: Coin): u64 {
+    let Coin { value: v } = c;
+    v
+}
 }
