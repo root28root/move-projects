@@ -24,19 +24,19 @@ jobs:
           sui --version
       - name: Build MyToken
         run: |
-          cd mytoken && sui move build
+          cd mytoken && sui move build --dump-bytecode-as-base64 --skip-fetch-latest-git-deps
       - name: Test MyToken (allow failure for now)
         run: |
           cd mytoken && sui move test || true
       - name: Build Escrow
         run: |
-          cd escrow && sui move build
+          cd escrow && sui move build --dump-bytecode-as-base64 --skip-fetch-latest-git-deps
       - name: Test Escrow (allow failure for now)
         run: |
           cd escrow && sui move test || true
       - name: Build SimpleNFT
         run: |
-          cd simplenft && sui move build
+          cd simplenft && sui move build --dump-bytecode-as-base64 --skip-fetch-latest-git-deps
       - name: Test SimpleNFT (allow failure for now)
         run: |
           cd simplenft && sui move test || true
