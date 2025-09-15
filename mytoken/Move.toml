@@ -1,11 +1,7 @@
 [package]
-name = "MyToken"
+name = "MyToken"         
 version = "0.0.1"
 authors = ["Rootmhz"]
 
 [addresses]
-MyToken = "0x0"
-
-[dependencies]
-MoveStdlib = { git = "https://github.com/move-language/move", subdir = "language/move-stdlib", rev = "main" }
-
+MyToken = "0x0"         
