@@ -14,7 +14,7 @@ module Escrow::escrow {
     const E_NOT_SELLER: u64   = 6;
 
     /// Простейший "кошелёк" для демонстрации логики (учебная модель)
-    struct Wallet has key {
+    struct Wallet has store { balance: u64 }
         balance: u64,
     }
 
@@ -55,27 +55,27 @@ module Escrow::escrow {
 
     /// Фандинг сделки (покупатель вносит сумму в эскроу)
     public fun fund(buyer: &signer, buyer_wallet: &mut Wallet, d: &mut Deal) {
-        assert!(signer::address_of(buyer) == d.buyer, error::invalid_argument(E_NOT_BUYER));
-        assert!(!d.funded, error::invalid_argument(E_ALREADY_FUNDED));
-        assert!(buyer_wallet.balance >= d.amount, error::invalid_argument(E_INSUFFICIENT));
+        assert!(signer::address_of(buyer) == d.buyer, E_NOT_BUYER);
+        assert!(!d.funded, E_ALREADY_FUNDED);
+        assert!(buyer_wallet.balance >= d.amount, E_INSUFFICIENT);
         buyer_wallet.balance = buyer_wallet.balance - d.amount;
         d.funded = true;
     }
 
     /// Выплата продавцу (выпуск средств из эскроу)
     public fun release(seller: &signer, seller_wallet: &mut Wallet, d: &mut Deal) {
-        assert!(signer::address_of(seller) == d.seller, error::invalid_argument(E_NOT_SELLER));
-        assert!(d.funded, error::invalid_argument(E_NOT_FUNDED));
-        assert!(!d.completed, error::invalid_argument(E_COMPLETED));
+        assert!(signer::address_of(seller) == d.seller, E_NOT_SELLER);
+        assert!(!d.funded, E_ALREADY_FUNDED);
+        assert!(!d.completed, E_COMPLETED);
         seller_wallet.balance = seller_wallet.balance + d.amount;
         d.completed = true;
     }
 
     /// Возврат покупателю (рефанд)
     public fun refund(buyer: &signer, buyer_wallet: &mut Wallet, d: &mut Deal) {
-        assert!(signer::address_of(buyer) == d.buyer, error::invalid_argument(E_NOT_BUYER));
-        assert!(d.funded, error::invalid_argument(E_NOT_FUNDED));
-        assert!(!d.completed, error::invalid_argument(E_COMPLETED));
+        assert!(signer::address_of(buyer) == d.buyer, E_NOT_BUYER);
+        assert!(d.funded, E_NOT_FUNDED);
+        assert!(!d.completed, E_COMPLETED);
         buyer_wallet.balance = buyer_wallet.balance + d.amount;
         d.completed = true;
     }
