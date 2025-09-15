@@ -30,3 +30,17 @@ sui move test
 This is a learning project in pure Move (MoveStdlib).
 
 No chain-specific framework used here (Sui/Aptos integration will be in separate projects).
+
+---
+# 🔐 Escrow (Move)
+
+Мини-эскроу без глобального состояния: кошельки, сделка, fund/release/refund.
+
+## 🚀 Deploy & Run (Aptos Devnet)
+
+**Package address:**  
+`0xb35962eed27b9a272d82673f2b7a99e7257b7b1a9af02c1a09143dacbaf498bd`
+
+- Publish tx: https://explorer.aptoslabs.com/txn/0xd7e2ec7644357e389586b3d8b838d2035e510b36f81a583bdd14f248a7daf1ce?network=devnet
+- Demo tx (entry_demo): https://explorer.aptoslabs.com/txn/0xc9bf98c9990ed8d5373774fdd0d1c0987064cc5d406f7e1576c6688643c07f4b?network=devnet
+
