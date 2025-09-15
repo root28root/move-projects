@@ -1,6 +1,9 @@
 module Escrow::escrow {
-    use std::error;
-    use std::signer;
+-    use std::error;
+-    use std::signer;
++    use 0x1::error;
++    use 0x1::signer;
+
 
     /// Ошибки
     const E_ALREADY_FUNDED: u64 = 1;
