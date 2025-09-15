@@ -57,12 +57,12 @@ module Escrow::escrow {
 
     /// Выплата продавцу (выпуск средств из эскроу)
     public fun release(seller: &signer, seller_wallet: &mut Wallet, d: &mut Deal) {
-        assert!(signer::address_of(seller) == d.seller, E_NOT_SELLER);
-        assert!(!d.funded, E_ALREADY_FUNDED);
-        assert!(!d.completed, E_COMPLETED);
-        seller_wallet.balance = seller_wallet.balance + d.amount;
-        d.completed = true;
-    }
+    assert!(signer::address_of(seller) == d.seller, E_NOT_SELLER);
+    assert!(d.funded, E_NOT_FUNDED);          // ДОЛЖНО быть funded = true
+    assert!(!d.completed, E_COMPLETED);
+    seller_wallet.balance = seller_wallet.balance + d.amount;
+    d.completed = true;
+}
 
     /// Возврат покупателю (рефанд)
     public fun refund(buyer: &signer, buyer_wallet: &mut Wallet, d: &mut Deal) {
