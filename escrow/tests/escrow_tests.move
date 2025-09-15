@@ -1,40 +1,34 @@
 module Escrow::escrow_tests {
-    use std::signer;
     use Escrow::escrow;
+
+    const BUYER: address = @0x1;
+    const SELLER: address = @0x2;
 
     #[test]
     public fun full_success_flow() {
-        let buyer = signer::spec_test_signer();
-        let seller = signer::spec_test_signer();
+        let bw = escrow::new_wallet();
+        let sw = escrow::new_wallet();
 
-        let mut bw = escrow::new_wallet(&buyer);
-        let mut sw = escrow::new_wallet(&seller);
+        escrow::deposit(&mut bw, 150);
+        let d = escrow::create(BUYER, SELLER, 100);
 
-        // Пополняем баланс покупателя и создаём сделку
-        escrow::deposit(&buyer, &mut bw, 150);
-        let mut d = escrow::create(&buyer, signer::address_of(&seller), 100);
-
-        // Вносим средства и выплачиваем продавцу
-        escrow::fund(&buyer, &mut bw, &mut d);
+        escrow::fund(BUYER, &mut bw, &mut d);
         assert!(escrow::balance(&bw) == 50, 0);
 
-        escrow::release(&seller, &mut sw, &mut d);
+        escrow::release(SELLER, &mut sw, &mut d);
         assert!(escrow::balance(&sw) == 100, 1);
     }
 
     #[test]
     public fun refund_flow() {
-        let buyer = signer::spec_test_signer();
-        let seller = signer::spec_test_signer();
+        let bw = escrow::new_wallet();
+        let sw = escrow::new_wallet();
 
-        let mut bw = escrow::new_wallet(&buyer);
-        let mut sw = escrow::new_wallet(&seller);
+        escrow::deposit(&mut bw, 100);
+        let d = escrow::create(BUYER, SELLER, 100);
 
-        escrow::deposit(&buyer, &mut bw, 100);
-        let mut d = escrow::create(&buyer, signer::address_of(&seller), 100);
-
-        escrow::fund(&buyer, &mut bw, &mut d);
-        escrow::refund(&buyer, &mut bw, &mut d);
+        escrow::fund(BUYER, &mut bw, &mut d);
+        escrow::refund(BUYER, &mut bw, &mut d);
 
         assert!(escrow::balance(&bw) == 100, 2);
         assert!(escrow::balance(&sw) == 0, 3);
