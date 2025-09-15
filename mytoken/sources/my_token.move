@@ -22,7 +22,7 @@ module MyToken::coin {
     }
 
     /// Transfer tokens
-    public fun transfer(from: &mut Coin, amount: u64): Coin acquires Coin {
+    public fun transfer(from: &mut Coin, amount: u64): Coin {
         assert!(from.value >= amount, error::invalid_argument(EINSUFFICIENT_BALANCE));
         from.value = from.value - amount;
         Coin { value: amount }
