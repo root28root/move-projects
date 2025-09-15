@@ -15,9 +15,12 @@ jobs:
           sudo apt-get update && sudo apt-get install -y libssl-dev pkg-config clang curl
       - name: Install Sui (prebuilt)
         run: |
+          sudo apt-get update && sudo apt-get install -y libssl-dev pkg-config clang curl
           curl -L https://github.com/MystenLabs/sui/releases/latest/download/sui-linux-x86_64.tgz -o sui.tgz
           tar -xzf sui.tgz
+          chmod +x sui
           sudo mv sui /usr/local/bin/sui
+          which sui
           sui --version
       - name: Build MyToken
         run: |
