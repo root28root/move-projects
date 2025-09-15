@@ -1,42 +1,49 @@
-name: Move Build & Test
+name: Move Build & Test (Aptos)
 on: [push, pull_request]
+
 jobs:
   move:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
+
       - name: Install deps
         run: |
-          sudo apt-get update && sudo apt-get install -y libssl-dev pkg-config clang curl
-      - name: Install Sui (prebuilt)
+          sudo apt-get update && sudo apt-get install -y curl python3
+
+      - name: Install Aptos CLI
         run: |
-          sudo apt-get update && sudo apt-get install -y libssl-dev pkg-config clang curl
-          curl -L https://github.com/MystenLabs/sui/releases/latest/download/sui-linux-x86_64.tgz -o sui.tgz
-          tar -xzf sui.tgz
-          chmod +x sui
-          sudo mv sui /usr/local/bin/sui
-          which sui
-          sui --version
-      - name: Build MyToken
+          curl -fsSL https://aptos.dev/scripts/install_cli.py | python3
+          aptos --version
+
+      # Compile each package with Aptos Move compiler
+      - name: Compile MyToken
         run: |
-          cd mytoken && sui move build --dump-bytecode-as-base64 --skip-fetch-latest-git-deps
-      - name: Test MyToken (allow failure for now)
+          cd mytoken
+          aptos move compile --save-metadata --bytecode-version 6
+
+      - name: Compile Escrow
         run: |
-          cd mytoken && sui move test || true
-      - name: Build Escrow
+          cd escrow
+          aptos move compile --save-metadata --bytecode-version 6
+
+      - name: Compile SimpleNFT
         run: |
-          cd escrow && sui move build --dump-bytecode-as-base64 --skip-fetch-latest-git-deps
-      - name: Test Escrow (allow failure for now)
+          cd simplenft
+          aptos move compile --save-metadata --bytecode-version 6
+
+      # (Optional) Run tests but don't fail pipeline yet
+      - name: Test MyToken (allow failure)
         run: |
-          cd escrow && sui move test || true
-      - name: Build SimpleNFT
+          cd mytoken
+          aptos move test || true
+
+      - name: Test Escrow (allow failure)
         run: |
-          cd simplenft && sui move build --dump-bytecode-as-base64 --skip-fetch-latest-git-deps
-      - name: Test SimpleNFT (allow failure for now)
+          cd escrow
+          aptos move test || true
+
+      - name: Test SimpleNFT (allow failure)
         run: |
-          cd simplenft && sui move test || true
+          cd simplenft
+          aptos move test || true
