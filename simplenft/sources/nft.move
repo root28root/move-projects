@@ -19,13 +19,12 @@ module SimpleNFT::nft {
         }
     }
 
+    /// Минтим ровно один NFT (#0) для демо
     public fun mint(r: &mut Registry, to: address, name: vector<u8>) {
-        // Разрешаем ровно один минт (#0) для демо
         assert!(!r.has0, 1);
         let id = r.next_id;
         r.next_id = id + 1;
 
-        // Заполняем поля примитивами — никаких ресурсов = нет проблем с drop
         r.id0 = id;
         r.name0 = name;
         r.owner0 = to;
@@ -44,7 +43,7 @@ module SimpleNFT::nft {
         r.owner0
     }
 
-    // «Поглощаем» реестр, чтобы не было implicit drop предупреждений
+    // «Поглощаем» реестр, чтобы не было implicit drop
     fun destroy_registry(r: Registry) {
         let Registry {
             next_id: _,
@@ -55,13 +54,19 @@ module SimpleNFT::nft {
         } = r;
     }
 
-    /// DEMO: создаём реестр, минтим NFT #0 → переводим → проверяем владельца
+    /// DEMO: минт → трансфер → проверка владельца
     public entry fun entry_demo(_s: &signer) {
         let r = new_registry();
         mint(&mut r, @0x1, b"Demo NFT");
         transfer(&mut r, 0, @0x2);
         let owner = get_owner(&r, 0);
         assert!(owner == @0x2, 0);
+        destroy_registry(r);
+    }
+
+// Для юнит-тестов: публичный «съедатель» реестра
+    #[test_only]
+    public fun destroy_for_test(r: Registry) {
         destroy_registry(r);
     }
 }
