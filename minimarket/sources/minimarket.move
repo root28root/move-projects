@@ -39,14 +39,6 @@ module minimarket::minimarket {
         assert!(market.admin == caller, E_ONLY_ADMIN);
     }
 
-    fun get_mut(market_addr: address): &mut Market acquires Market {
-        borrow_global_mut<Market>(market_addr)
-    }
-
-    fun get(market_addr: address): &Market acquires Market {
-        borrow_global<Market>(market_addr)
-    }
-
     fun find_balance_index(balances: &vector<Balance>, owner: address): (bool, u64) {
         let i = 0u64;
         let len = vector::length(balances);
@@ -69,7 +61,7 @@ module minimarket::minimarket {
     }
 
     /// init(admin, fee_bps: 0..=10000)
-    /// ВАЖНО: здесь НЕТ `acquires`, мы не читаем/не извлекаем глобальные ресурсы; только `exists` + `move_to`.
+    /// ВАЖНО: здесь НЕТ `acquires`, мы не выносим ссылки из глобального состояния.
     public entry fun init(admin: &signer, fee_bps: u64) {
         let admin_addr = signer::address_of(admin);
         assert!(!exists<Market>(admin_addr), E_ALREADY_INITIALIZED);
@@ -89,7 +81,7 @@ module minimarket::minimarket {
     public entry fun list(seller: &signer, market_addr: address, item_id: u64, price: u64) acquires Market {
         assert_initialized(market_addr);
         let seller_addr = signer::address_of(seller);
-        let m = get_mut(market_addr);
+        let m = borrow_global_mut<Market>(market_addr);
 
         let len = vector::length(&m.items);
         if (item_id == len) {
@@ -105,9 +97,9 @@ module minimarket::minimarket {
     }
 
     /// buy(item_id, pay_amount == price). Комиссия удерживается в пуле.
-    public entry fun buy(buyer: &signer, market_addr: address, item_id: u64, pay_amount: u64) acquires Market {
+    public entry fun buy(_buyer: &signer, market_addr: address, item_id: u64, pay_amount: u64) acquires Market {
         assert_initialized(market_addr);
-        let m = get_mut(market_addr);
+        let m = borrow_global_mut<Market>(market_addr);
         let len = vector::length(&m.items);
         assert!(item_id < len, E_BAD_ITEM_ID);
 
@@ -128,7 +120,7 @@ module minimarket::minimarket {
     public entry fun withdraw_fees(admin: &signer, market_addr: address) acquires Market {
         assert_initialized(market_addr);
         let caller = signer::address_of(admin);
-        let m = get_mut(market_addr);
+        let m = borrow_global_mut<Market>(market_addr);
         only_admin(m, caller);
 
         let amount = m.fees_accumulated;
@@ -140,7 +132,7 @@ module minimarket::minimarket {
 
     /// Просмотр внутреннего баланса (для демо/тестов)
     public fun view_balance(market_addr: address, owner: address): u64 acquires Market {
-        let m = get(market_addr);
+        let m = borrow_global<Market>(market_addr);
         let (found, idx) = find_balance_index(&m.balances, owner);
         if (!found) { 0 } else { vector::borrow(&m.balances, idx).amount }
     }
