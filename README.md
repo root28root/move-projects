@@ -79,6 +79,7 @@ aptos move compile
 aptos move publish --assume-yes
 aptos move run --function-id <ADDR>::<MODULE>::<ENTRY>
 
+----
 
 ## Quick start (local)
 
