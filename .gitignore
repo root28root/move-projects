@@ -1,1 +1,10 @@
-build/
+# Aptos Move build artifacts
+**/build/
+.move/
+**/Move.lock
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
