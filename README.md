@@ -37,3 +37,38 @@
 ![Move CI](https://github.com/root28root/move-projects/actions/workflows/move-ci.yml/badge.svg)
 
 
+
+# Move Projects (Aptos Devnet)
+
+[![CI](https://github.com/root28root/move-projects/actions/workflows/move-ci.yml/badge.svg?branch=main)](https://github.com/root28root/move-projects/actions/workflows/move-ci.yml)
+
+## Deployed on Devnet
+- **MyToken (mytoken/)**  
+  Publish: `0xa40edb103423fee591d4947cb15843af4513cfb4b45a9275faa6ea444f2d74d8`  
+  Demo (entry): `0x1f0cadf053ac26b3775a9585b53a88c480cd0a3f6d8b9f979a9fb98bae2acdab`
+
+- **Escrow (escrow/)**  
+  Publish: `0xd7e2ec7644357e389586b3b8b838d2035e510b36f81a583bdd14f248a7daf1ce`  
+  Demo (entry): `0xc9bf98c9990ed8d5373774fdd0d1c0987064cc5d406f7e1576c6688643c07f4b`
+
+- **SimpleNFT (simplenft/)**  
+  Publish: `0xfe1cbd0b4514deb3c529aee2286a35f3f3f5f177acc7867dcfa428f48305bec4`  
+  Demo (entry): `0x279c2d6adcc180f572329e253077f65f9c792cb14a5e9e49b6346540585754f2`
+
+- **MiniMarketplace (minimarket/)**  
+  Publish: `0x2143c7502fb75afc1dfe4bd4cf316188fc8656dc4e997e13108c22d3cc770a46`  
+  Demo (entry): `0xda2fb28c29d037406aa658a0b5e4e69514d663c22975011674d95a4aec20703f`
+
+## How to run locally
+
+Requirements: Windows + WSL (Kali), **Aptos CLI 7.8.0**, profile `default`, network `devnet`.
+
+```bash
+# проверить профиль
+aptos config show-profiles
+
+# собрать/опубликовать/запустить
+cd <project-dir>
+aptos move compile
+aptos move publish --assume-yes
+aptos move run --function-id <ADDR>::<MODULE>::<ENTRY>
