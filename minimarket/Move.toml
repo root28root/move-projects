@@ -1,0 +1,13 @@
+[package]
+name = "MiniMarketplace"
+version = "0.1.0"
+authors = ["root28root"]
+
+[addresses]
+minimarket = "0xb35962eed27b9a272d82673f2b7a99e7257b7b1a9af02c1a09143dacbaf498bd"
+
+[dev-addresses]
+minimarket = "0xb35962eed27b9a272d82673f2b7a99e7257b7b1a9af02c1a09143dacbaf498bd"
+
+[dependencies]
+# Никаких внешних deps. builtin vector/option/signer/arith используются без деклараций.
