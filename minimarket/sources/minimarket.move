@@ -146,3 +146,41 @@ module minimarket::minimarket {
         withdraw_fees(admin, admin_addr);
     }
 }
+
+#[test_only]
+module minimarket::minimarket_tests {
+    use std::signer;
+    use minimarket::minimarket;
+
+    #[test(admin = @0xA)]
+    public entry fun test_init_ok(admin: &signer) {
+        minimarket::init(admin, 250); // 2.5%
+    }
+
+    #[test(admin = @0xB)]
+    #[expected_failure(abort_code = 1)] // E_ALREADY_INITIALIZED
+    public entry fun test_init_twice_fail(admin: &signer) {
+        minimarket::init(admin, 0);
+        minimarket::init(admin, 0);
+    }
+
+    #[test(s = @0xC)]
+    public entry fun test_list_buy_withdraw(s: &signer) {
+        let a = signer::address_of(s);
+        minimarket::init(s, 1000);             // 10% комиссия
+        minimarket::list(s, a, 0, 10_000);     // новый слот
+        minimarket::buy(s, a, 0, 10_000);      // покупка
+        minimarket::withdraw_fees(s, a);       // админ = продавец
+        let bal = minimarket::view_balance(a, a);
+        assert!(bal == 10_000, 0);
+    }
+
+    #[test(admin = @0xD)]
+    #[expected_failure(abort_code = 8)] // E_PRICE_MISMATCH
+    public entry fun test_buy_price_mismatch(admin: &signer) {
+        let a = signer::address_of(admin);
+        minimarket::init(admin, 250);
+        minimarket::list(admin, a, 0, 10_000);
+        minimarket::buy(admin, a, 0, 9_999);
+    }
+}
