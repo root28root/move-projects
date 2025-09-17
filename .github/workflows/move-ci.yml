@@ -23,10 +23,14 @@ jobs:
       - name: Static sanity checks
         run: |
           set -euo pipefail
-          # 1) плейсхолдеров {{ADDR}} быть не должно (игнорим build/ и vendor/)
-          ! grep -RIn '{{ADDR}}' -- . --exclude-dir=build --exclude-dir=vendor || (echo 'ERROR: found {{ADDR}} placeholders' && exit 1)
-          # 2) в ТЕСТАХ запрещаем std:: (в сорцах допустимо, если есть [addresses] std="0x1")
-          ! grep -RIn 'use std::' -- */tests --include='*.move' --exclude-dir=build --exclude-dir=vendor || (echo 'ERROR: found std:: imports in tests; use 0x1::' && exit 1)
+          # 1) нет плейсхолдеров {{ADDR}} (игнорим build/ и vendor/)
+          if grep -RIn --exclude-dir=build --exclude-dir=vendor '{{ADDR}}' .; then
+            echo 'ERROR: found {{ADDR}} placeholders'; exit 1; fi
+          # 2) в ТЕСТАХ не должно быть use std:: (игнорим build/ и vendor/)
+          if ls */tests/*.move >/dev/null 2>&1; then
+            if grep -RIn --include='*.move' --exclude-dir=build --exclude-dir=vendor 'use std::' */tests; then
+              echo 'ERROR: found std:: imports in tests; use 0x1::'; exit 1; fi
+          fi
 
       - name: Repo-wide build & tests
-        run: ./tools/check.s
+        run: ./tools/check.sh
