@@ -7,9 +7,5 @@ authors = ["root28root"]
 minimarket = "0x225b149b3bfc3caabcbb7edf8c855636c0c00131226127e35545556aaf325278"
 std = "0x1"
 
-[dev-addresses]
-minimarket = "0x225b149b3bfc3caabcbb7edf8c855636c0c00131226127e35545556aaf325278"
-std = "0x1"
-
 [dependencies]
 MoveStdlib = { local = "vendor/aptos-core/aptos-move/framework/move-stdlib" }
