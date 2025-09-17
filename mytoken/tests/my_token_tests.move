@@ -1,5 +1,6 @@
 #[test_only]
 module MyToken::my_token_tests {
+    use 0x1::signer;
     use 0x1::vector;
     use MyToken::coin;
 
@@ -22,8 +23,4 @@ module MyToken::my_token_tests {
         assert!(coin::balance(&c) == 100, 0);
         sink(admin, c);
     }
-
-    // Негатив: попытка «borrow_global» там, где ресурса нет — падать не должно,
-    // если модуль coin не хранит глобальное состояние. Этот тест чисто как шаблон:
-    // можно удалить, если у coin нет такого поведения.
 }
