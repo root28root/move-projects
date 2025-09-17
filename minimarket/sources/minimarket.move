@@ -1,8 +1,7 @@
-module @minimarket::minimarket {
+module minimarket::minimarket {
     use std::signer;
     use std::vector;
 
-    /// Ошибки
     const E_ALREADY_INITIALIZED: u64 = 1;
     const E_NOT_INITIALIZED: u64 = 2;
     const E_BAD_FEE_BPS: u64 = 3;
@@ -12,30 +11,25 @@ module @minimarket::minimarket {
     const E_NOT_LISTED: u64 = 7;
     const E_PRICE_MISMATCH: u64 = 8;
 
-    /// Простая запись о лоте
     struct Item has drop, store {
         seller: address,
         price: u64,
         listed: bool,
     }
 
-    /// Баланс внутри модуля (псевдо-коины для демо)
     struct Balance has drop, store {
         owner: address,
         amount: u64,
     }
 
-    /// Синглтон маркетплейса, хранится под адресом администратора (инициатора init).
     struct Market has key {
         admin: address,
-        fee_bps: u64,              // 0..=10_000
-        fees_accumulated: u64,     // Накопленные комиссии
-        items: vector<Item>,       // По индексу = item_id
-        balances: vector<Balance>, // Простая "карта": поиск по адресу линейный
+        fee_bps: u64,
+        fees_accumulated: u64,
+        items: vector<Item>,
+        balances: vector<Balance>,
         initialized: bool,
     }
-
-    /// === helpers ===
 
     fun assert_initialized(market_addr: address) {
         assert!(exists<Market>(market_addr), E_NOT_INITIALIZED);
@@ -46,30 +40,24 @@ module @minimarket::minimarket {
     }
 
     fun get_mut(market_addr: address): &mut Market acquires Market {
-        let m = borrow_global_mut<Market>(market_addr);
-        m
+        borrow_global_mut<Market>(market_addr)
     }
 
     fun get(market_addr: address): &Market acquires Market {
-        let m = borrow_global<Market>(market_addr);
-        m
+        borrow_global<Market>(market_addr)
     }
 
-    /// Найти индекс баланса по адресу, либо вернуть опционально None.
     fun find_balance_index(balances: &vector<Balance>, owner: address): (bool, u64) {
         let i = 0u64;
         let len = vector::length(balances);
         while (i < len) {
             let b = vector::borrow(balances, i);
-            if (b.owner == owner) {
-                return (true, i)
-            };
+            if (b.owner == owner) return (true, i);
             i = i + 1;
         };
         (false, 0)
     }
 
-    /// Кредитовать внутренний баланс.
     fun credit_balance(balances: &mut vector<Balance>, owner: address, amount: u64) {
         let (found, idx) = find_balance_index(balances, owner);
         if (found) {
@@ -80,9 +68,7 @@ module @minimarket::minimarket {
         }
     }
 
-    /// === entry ===
-
-    /// Инициализация маркетплейса под адресом администратора (signer).
+    /// init(admin, fee_bps: 0..=10000)
     public entry fun init(admin: &signer, fee_bps: u64) acquires Market {
         let admin_addr = signer::address_of(admin);
         assert!(!exists<Market>(admin_addr), E_ALREADY_INITIALIZED);
@@ -98,7 +84,7 @@ module @minimarket::minimarket {
         });
     }
 
-    /// Размещение лота. Если item_id == len, пушим новый; если меньше len — ячейка должна быть свободна.
+    /// list(item_id, price). Если item_id == len(items) — добавляем новый слот.
     public entry fun list(seller: &signer, market_addr: address, item_id: u64, price: u64) acquires Market {
         assert_initialized(market_addr);
         let seller_addr = signer::address_of(seller);
@@ -110,7 +96,6 @@ module @minimarket::minimarket {
         } else {
             assert!(item_id < len, E_BAD_ITEM_ID);
             let it = vector::borrow_mut(&mut m.items, item_id);
-            // Разрешаем перезалистинг только если ячейка свободна
             assert!(!it.listed, E_ALREADY_LISTED);
             it.seller = seller_addr;
             it.price = price;
@@ -118,7 +103,7 @@ module @minimarket::minimarket {
         }
     }
 
-    /// Покупка лота. Внутренняя «оплата»: увеличиваем баланс продавца, удерживаем комиссию в пуле.
+    /// buy(item_id, pay_amount == price). Комиссия удерживается в пуле.
     public entry fun buy(buyer: &signer, market_addr: address, item_id: u64, pay_amount: u64) acquires Market {
         assert_initialized(market_addr);
         let m = get_mut(market_addr);
@@ -129,19 +114,16 @@ module @minimarket::minimarket {
         assert!(it.listed, E_NOT_LISTED);
         assert!(pay_amount == it.price, E_PRICE_MISMATCH);
 
-        // комиссия: (price * fee_bps) / 10000
         let fee = (it.price * m.fee_bps) / 10000;
         let seller_amount = it.price - fee;
 
-        // начисляем продавцу, накапливаем комиссию
         credit_balance(&mut m.balances, it.seller, seller_amount);
         m.fees_accumulated = m.fees_accumulated + fee;
 
-        // снимаем лот
         it.listed = false;
     }
 
-    /// Вывод комиссий админом во внутренний баланс админа
+    /// withdraw_fees(): админ зачисляет накопленную комиссию на свой внутренний баланс.
     public entry fun withdraw_fees(admin: &signer, market_addr: address) acquires Market {
         assert_initialized(market_addr);
         let caller = signer::address_of(admin);
@@ -155,29 +137,19 @@ module @minimarket::minimarket {
         }
     }
 
-    /// Просмотр баланса (для тестов/демо)
+    /// Просмотр внутреннего баланса (для демо/тестов)
     public fun view_balance(market_addr: address, owner: address): u64 acquires Market {
         let m = get(market_addr);
         let (found, idx) = find_balance_index(&m.balances, owner);
         if (!found) { 0 } else { vector::borrow(&m.balances, idx).amount }
     }
 
-    /// Демонстрационная процедура (сценарий happy-path)
+    /// Быстрый сценарий: init(2.5%), list(0,10_000), buy, withdraw_fees.
     public entry fun entry_demo(admin: &signer) acquires Market {
-        // 1) init с 250 bps = 2.5%
         init(admin, 250);
         let admin_addr = signer::address_of(admin);
-
-        // 2) Продавец = админ для простоты. Листинг item_id=0 по цене 10_000
         list(admin, admin_addr, 0, 10_000);
-
-        // 3) Покупка тем же аккаунтом для демо (в реале будет другой signer)
         buy(admin, admin_addr, 0, 10_000);
-
-        // 4) Вывод комиссии админом
         withdraw_fees(admin, admin_addr);
-        // Теперь у админа во внутреннем балансе 10_000 (от продажи) + 250 (комиссия) не будет,
-        // комиссия не прибавляется к продавцу; продавцу ушло 9_750, комиссия 250 ушла в пул и затем на баланс админа.
-        // Проверки оставляем в юнит-тестах.
     }
 }
