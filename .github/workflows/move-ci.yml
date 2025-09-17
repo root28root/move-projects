@@ -20,17 +20,19 @@ jobs:
           echo "$HOME/.local/bin" >> $GITHUB_PATH
           aptos --version
 
-      - name: Static sanity checks
+            - name: Static sanity checks
         run: |
           set -euo pipefail
-          # 1) нет плейсхолдеров {{ADDR}} (игнорим build/ и vendor/)
-          if grep -RIn --exclude-dir=build --exclude-dir=vendor '{{ADDR}}' .; then
+          # 1) нет плейсхолдеров {{ADDR}} в коде проектов (игнорим build/, vendor/, .github/)
+          if grep -RIn '{{ADDR}}' mytoken escrow simplenft minimarket \
+               --exclude-dir=build --exclude-dir=vendor --exclude-dir=.github; then
             echo 'ERROR: found {{ADDR}} placeholders'; exit 1; fi
-          # 2) в ТЕСТАХ не должно быть use std:: (игнорим build/ и vendor/)
-          if ls */tests/*.move >/dev/null 2>&1; then
-            if grep -RIn --include='*.move' --exclude-dir=build --exclude-dir=vendor 'use std::' */tests; then
-              echo 'ERROR: found std:: imports in tests; use 0x1::'; exit 1; fi
-          fi
+
+          # 2) в ТЕСТАХ не должно быть `use std::` (только 0x1::)
+          if grep -RIn 'use std::' mytoken/tests escrow/tests simplenft/tests minimarket/tests \
+               --include='*.move' --exclude-dir=build --exclude-dir=vendor --exclude-dir=.github; then
+            echo 'ERROR: found std:: imports in tests; use 0x1::'; exit 1; fi
+
 
       - name: Repo-wide build & tests
         run: ./tools/check.sh
