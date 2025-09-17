@@ -20,5 +20,11 @@ jobs:
           echo "$HOME/.local/bin" >> $GITHUB_PATH
           aptos --version
 
+- name: Static sanity checks
+  run: |
+    set -euo pipefail
+    ! grep -RIn "{{ADDR}}" -- . || (echo "ERROR: found {{ADDR}} placeholders" && exit 1)
+    ! grep -RIn "use std::" -- . || (echo "ERROR: found std:: imports; use 0x1::" && exit 1)
+
       - name: Repo-wide build & tests
         run: ./tools/check.sh
