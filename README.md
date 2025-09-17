@@ -78,3 +78,17 @@ cd <project-dir>
 aptos move compile
 aptos move publish --assume-yes
 aptos move run --function-id <ADDR>::<MODULE>::<ENTRY>
+
+
+## Quick start (local)
+
+```bash
+# проверить профиль Aptos
+aptos config show-profiles
+
+# репо-чек (собрать и прогнать юнит-тесты во всех подпроектах)
+./tools/check.sh
+
+# вручную по проекту
+cd minimarket && aptos move compile && aptos move test --filter .
+
