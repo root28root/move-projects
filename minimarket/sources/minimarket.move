@@ -158,7 +158,7 @@ module minimarket::minimarket_tests {
     }
 
     #[test(admin = @0xB)]
-    #[expected_failure(abort_code = 1)] // E_ALREADY_INITIALIZED
+    #[expected_failure(abort_code = 1, location = @0x225b149b3bfc3caabcbb7edf8c855636c0c00131226127e35545556aaf325278)] // E_ALREADY_INITIALIZED
     public entry fun test_init_twice_fail(admin: &signer) {
         minimarket::init(admin, 0);
         minimarket::init(admin, 0);
@@ -176,7 +176,7 @@ module minimarket::minimarket_tests {
     }
 
     #[test(admin = @0xD)]
-    #[expected_failure(abort_code = 8)] // E_PRICE_MISMATCH
+    #[expected_failure(abort_code = 8, location = @0x225b149b3bfc3caabcbb7edf8c855636c0c00131226127e35545556aaf325278)] // E_PRICE_MISMATCH
     public entry fun test_buy_price_mismatch(admin: &signer) {
         let a = signer::address_of(admin);
         minimarket::init(admin, 250);
