@@ -23,4 +23,5 @@ module MyToken::my_token_tests {
         assert!(coin::balance(&c) == 100, 0);
         sink(admin, c);
     }
+
 }
