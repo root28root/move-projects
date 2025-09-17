@@ -61,15 +61,15 @@ module Escrow::escrow {
         let Deal { buyer: _, seller: _, amount: _, funded: _, completed: _ } = d;
     }
 
-    /// Публичные обёртки для юнит-тестов
-    #[test_only]
-    public fun destroy_wallet_for_test(w: Wallet) { destroy_wallet(w); }
+     // Публичные обёртки для юнит-тестов
+     #[test_only]
+     public fun destroy_wallet_for_test(w: Wallet) { destroy_wallet(w); }
 
-    #[test_only]
-    public fun destroy_deal_for_test(d: Deal) { destroy_deal(d); }
+     #[test_only]
+     public fun destroy_deal_for_test(d: Deal) { destroy_deal(d); }
 
-    /// DEMO entry: депозит → фандинг → релиз
-    public entry fun entry_demo(_s: &signer) {
+     /// DEMO entry: депозит → фандинг → релиз
+        public entry fun entry_demo(_s: &signer) {
         let bw = new_wallet();
         let sw = new_wallet();
 
