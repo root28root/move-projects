@@ -5,7 +5,7 @@ module 0xb35962eed27b9a272d82673f2b7a99e7257b7b1a9af02c1a09143dacbaf498bd::my_to
     use 0xb35962eed27b9a272d82673f2b7a99e7257b7b1a9af02c1a09143dacbaf498bd::coin;
 
     /// «Мусорка», чтобы не дропать Coin локально: складируем в вектор.
-    struct Trash has key { inner: vector::Vector<coin::Coin> }
+    struct Trash has key { inner: vector<coin::Coin> }
 
     public entry fun init_trash(s: &signer) {
         move_to(s, Trash { inner: vector::empty<coin::Coin>() });
