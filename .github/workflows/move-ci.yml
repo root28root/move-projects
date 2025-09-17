@@ -20,11 +20,13 @@ jobs:
           echo "$HOME/.local/bin" >> $GITHUB_PATH
           aptos --version
 
-- name: Static sanity checks
-  run: |
-    set -euo pipefail
-    ! grep -RIn "{{ADDR}}" -- . || (echo "ERROR: found {{ADDR}} placeholders" && exit 1)
-    ! grep -RIn "use std::" -- . || (echo "ERROR: found std:: imports; use 0x1::" && exit 1)
+      - name: Static sanity checks
+        run: |
+          set -euo pipefail
+          # 1) плейсхолдеров {{ADDR}} быть не должно (игнорим build/ и vendor/)
+          ! grep -RIn '{{ADDR}}' -- . --exclude-dir=build --exclude-dir=vendor || (echo 'ERROR: found {{ADDR}} placeholders' && exit 1)
+          # 2) в ТЕСТАХ запрещаем std:: (в сорцах допустимо, если есть [addresses] std="0x1")
+          ! grep -RIn 'use std::' -- */tests --include='*.move' --exclude-dir=build --exclude-dir=vendor || (echo 'ERROR: found std:: imports in tests; use 0x1::' && exit 1)
 
       - name: Repo-wide build & tests
-        run: ./tools/check.sh
+        run: ./tools/check.s
