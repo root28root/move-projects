@@ -1,3 +1,6 @@
+> **Hire me:** Move dev for Aptos/Sui — PoCs (1–3 days), mini-audits, porting logic to Move.  
+> DM: @rootmhz • Email: 007rootmhz@gmail.com
+
 # 👋 Hi, I'm Rootmhz
 
 🚀 **Move Developer (Sui & Aptos)**  
