@@ -1,65 +1,24 @@
 name: Move Build & Test (Aptos)
-on: [push, pull_request]
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  move:
+  build-test:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: Install deps
-        run: |
-          sudo apt-get update && sudo apt-get install -y curl python3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Install Aptos CLI
         run: |
-          curl -fsSL https://aptos.dev/scripts/install_cli.py | python3
-          which aptos || true
-          aptos --version || true
+          curl -sSL "https://aptos.dev/scripts/install_cli.py" | python3
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          aptos --version
 
-      - name: Compile MyToken (capture log, don't fail)
-        run: |
-          cd mytoken
-          set -o pipefail
-          (aptos move compile --save-metadata --bytecode-version 6 2>&1 | tee compile.log) || true
-
-      - name: Compile Escrow (capture log, don't fail)
-        run: |
-          cd escrow
-          set -o pipefail
-          (aptos move compile --save-metadata --bytecode-version 6 2>&1 | tee compile.log) || true
-
-      - name: Compile SimpleNFT (capture log, don't fail)
-        run: |
-          cd simplenft
-          set -o pipefail
-          (aptos move compile --save-metadata --bytecode-version 6 2>&1 | tee compile.log) || true
-
-      - name: Test MyToken (allow failure)
-        run: |
-          cd mytoken
-          (aptos move test 2>&1 | tee test.log) || true
-
-      - name: Test Escrow (allow failure)
-        run: |
-          cd escrow
-          (aptos move test 2>&1 | tee test.log) || true
-
-      - name: Test SimpleNFT (allow failure)
-        run: |
-          cd simplenft
-          (aptos move test 2>&1 | tee test.log) || true
-
-      - name: Upload logs as artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: move-logs
-          path: |
-            mytoken/compile.log
-            mytoken/test.log
-            escrow/compile.log
-            escrow/test.log
-            simplenft/compile.log
-            simplenft/test.log
-          if-no-files-found: ignore
+      - name: Repo-wide build & tests
+        run: ./tools/check.sh
