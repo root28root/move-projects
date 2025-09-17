@@ -69,7 +69,8 @@ module minimarket::minimarket {
     }
 
     /// init(admin, fee_bps: 0..=10000)
-    public entry fun init(admin: &signer, fee_bps: u64) acquires Market {
+    /// Важно: здесь НЕТ `acquires`, мы не читаем глобальные ресурсы, а публикуем новый через `move_to`.
+    public entry fun init(admin: &signer, fee_bps: u64) {
         let admin_addr = signer::address_of(admin);
         assert!(!exists<Market>(admin_addr), E_ALREADY_INITIALIZED);
         assert!(fee_bps <= 10000, E_BAD_FEE_BPS);
