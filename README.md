@@ -1,5 +1,8 @@
-> **Hire me:** Move dev for Aptos/Sui — PoCs (1–3 days), mini-audits, porting logic to Move.  
+> **Hire me:** Move dev for Aptos/Sui — PoCs, mini-audits, porting logic to Move.  
 > DM: @rootmhz • Email: 007rootmhz@gmail.com
+[![CI](https://github.com/root28root/move-projects/actions/workflows/move-ci.yml/badge.svg?branch=main)](…)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+![Move](https://img.shields.io/badge/Move-Aptos%2FSui-blue)
 
 # 👋 Hi, I'm Rootmhz
 
