@@ -69,4 +69,8 @@ module SimpleNFT::nft {
     public fun destroy_for_test(r: Registry) {
         destroy_registry(r);
     }
+   
+// Публичная обёртка для юнит-тестов
+    #[test_only]
+    public fun destroy_registry_for_test(r: Registry) { destroy_registry(r); }
 }
