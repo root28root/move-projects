@@ -4,7 +4,7 @@ module MyToken::my_token_tests {
     use 0x1::vector;
     use MyToken::coin;
 
-    // Простой «синк», чтобы не дропать ресурс coin::Coin
+    // простой «синк», чтобы не дропать ресурс coin::Coin
     struct Trash has key { inner: vector<coin::Coin> }
 
     public entry fun init_trash(acc: &signer) {
@@ -16,6 +16,7 @@ module MyToken::my_token_tests {
         vector::push_back(&mut t.inner, c);
     }
 
+    // позитив: один mint
     #[test(admin = @0xA)]
     public entry fun test_mint_balance_ok(admin: &signer) acquires Trash {
         init_trash(admin);
@@ -24,4 +25,15 @@ module MyToken::my_token_tests {
         sink(admin, c);
     }
 
+    // позитив: два mint’а, проверяем оба баланса отдельно
+    #[test(admin = @0xB)]
+    public entry fun test_double_mint_ok(admin: &signer) acquires Trash {
+        init_trash(admin);
+        let c1 = coin::mint(60);
+        let c2 = coin::mint(250);
+        assert!(coin::balance(&c1) == 60, 0);
+        assert!(coin::balance(&c2) == 250, 1);
+        sink(admin, c1);
+        sink(admin, c2);
+    }
 }
