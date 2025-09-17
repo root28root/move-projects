@@ -1,7 +1,7 @@
 #[test_only]
 module 0xb35962eed27b9a272d82673f2b7a99e7257b7b1a9af02c1a09143dacbaf498bd::my_token_tests {
-    use std::signer;
-    use std::option;
+    use 0x1::signer;
+    use 0x1::option;
     use 0xb35962eed27b9a272d82673f2b7a99e7257b7b1a9af02c1a09143dacbaf498bd::coin;
 
     /// Тестовая «мусорка», чтобы не дропать Coin локально.
