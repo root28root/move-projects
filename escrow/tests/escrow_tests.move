@@ -1,6 +1,5 @@
 #[test_only]
 module Escrow::escrow_tests {
-    use 0x1::signer;
     use Escrow::escrow;
 
     const BUYER: address = @0x1;
