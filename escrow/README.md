@@ -44,7 +44,7 @@ No chain-specific framework used here (Sui/Aptos integration will be in separate
 - Publish tx: https://explorer.aptoslabs.com/txn/0xd7e2ec7644357e389586b3d8b838d2035e510b36f81a583bdd14f248a7daf1ce?network=devnet
 - Demo tx (entry_demo): https://explorer.aptoslabs.com/txn/0xc9bf98c9990ed8d5373774fdd0d1c0987064cc5d406f7e1576c6688643c07f4b?network=devnet
 
-## Contacts
+# Contacts
 - Discord: [@rootmhz_](https://discord.com/users/1047911417396875264)
 - Telegram: [@Nikolai_Rootmhz](https://t.me/Nikolai_Rootmhz)
 - Email: [007rootmhz@gmail.com](mailto:007rootmhz@gmail.com)
