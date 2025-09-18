@@ -1,0 +1,98 @@
+name: "💼 Hire me"
+description: Kick off a short paid task / PoC / mini-audit
+title: "Hire: <short scope>"
+labels: ["hire-me", "priority:triage"]
+assignees:
+  - root28root
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: What you need (1–3 sentences)
+      description: Short description of the task / goal.
+      placeholder: Implement PoC for escrow timeout on Aptos with unit tests and demo entry.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: chain
+    attributes:
+      label: Target chain
+      options:
+        - Aptos
+        - Sui
+        - Both / not sure
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope type
+      options:
+        - label: PoC (1–3 days)
+        - label: Mini-audit
+        - label: Porting logic to Move
+        - label: Other
+
+  - type: textarea
+    id: refs
+    attributes:
+      label: Repo / spec / references
+      description: Links to repos, docs, specific modules/functions if possible.
+      placeholder: https://github.com/org/repo (module X::Y, entry Z)
+    validations:
+      required: true
+
+  - type: textarea
+    id: deliverables
+    attributes:
+      label: Deliverables & acceptance
+      description: What artifacts and pass criteria define “done”.
+      placeholder: >
+        - Code in PR + unit tests + CI green
+        - Demo entry function
+        - Short README on how to run
+    validations:
+      required: true
+
+  - type: input
+    id: budget
+    attributes:
+      label: Budget range (USD)
+      placeholder: e.g. $300–$800
+    validations:
+      required: false
+
+  - type: input
+    id: timeline
+    attributes:
+      label: Timeline / deadline
+      placeholder: e.g. 3–5 days, until 2025-09-25
+    validations:
+      required: true
+
+  - type: textarea
+    id: env
+    attributes:
+      label: Constraints / environment
+      description: Move/CLI versions, standards, gas/fee constraints, invariants, etc.
+      placeholder: Aptos CLI 7.8.0; must keep backward-compatible ABI; max fee bps 250
+    validations:
+      required: false
+
+  - type: textarea
+    id: comms
+    attributes:
+      label: Access & comms
+      description: Repo access, testnet accounts, preferred comms (TG/email), timezone.
+      placeholder: Grant write on fork; TG @…; UTC+2
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        **Contacts:** TG @rootmhz • email 007rootmhz@gmail.com
+
+        > ⚠️ Do not post secrets here (private keys, seed phrases, API secrets).
