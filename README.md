@@ -51,3 +51,6 @@ Deliver production-ready smart contracts on Move; contribute to Aptos/Sui (bount
 
 Need a PoC , mini-audit, or port to Move?
 DM @rootmhz • Email 007rootmhz@gmail.com
+
+— See: [Changelog](./CHANGELOG.md)
+
