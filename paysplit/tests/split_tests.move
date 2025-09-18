@@ -1,6 +1,7 @@
 #[test_only]
 module PaySplit::split_tests {
     use 0x1::signer;
+    use 0x1::vector;
     use PaySplit::split;
 
     const A1: address = @0x1;
@@ -10,21 +11,23 @@ module PaySplit::split_tests {
     // Happy path: 100 with shares [3,1] → 75/25
     #[test(admin = @0xA, payer = @0xB)]
     public entry fun test_split_3_1(admin: &signer, payer: &signer) {
-        split::init(
-            admin,
-            vector::singleton(A1) + vector::singleton(A2),
-            vector::singleton(3)  + vector::singleton(1)
-        );
+        // recipients = [A1, A2]
+        let recips = vector::singleton<address>(A1);
+        let tail_r = vector::singleton<address>(A2);
+        vector::append(&mut recips, tail_r);
+
+        // shares = [3, 1]
+        let shares = vector::singleton<u64>(3);
+        let tail_s = vector::singleton<u64>(1);
+        vector::append(&mut shares, tail_s);
+
+        split::init(admin, recips, shares);
         let admin_addr = signer::address_of(admin);
 
         split::deposit(payer, admin_addr, 100);
 
         assert!(split::view_balance(admin_addr, A1) == 75, 0);
         assert!(split::view_balance(admin_addr, A2) == 25, 1);
-
-        // withdraw A1 → balance zero
-        // создадим signer для A1 через тестовый параметр? Упростим: проверим только математику
-        // (второй тест покажет withdraw)
     }
 
     // Remainder path: [1,1,1] & 100 → each 33, remainder 1 → admin can withdraw fees
