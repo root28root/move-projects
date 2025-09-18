@@ -15,29 +15,30 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Aptos CLI
-  env:
-    GH_TOKEN: ${{ github.token }}       # даём токен скрипту (снимает rate limit)
-    GITHUB_TOKEN: ${{ github.token }}   # на всякий — оба названия переменных
-  run: |
-    set -euo pipefail
-    # ретрай с экспоненциальной задержкой, если вдруг API снова вернёт 403
-    for i in 0 1 2 3; do
-      if curl -sSL "https://aptos.dev/scripts/install_cli.py" | python3; then
-        break
-      fi
-      echo "Install failed, retry in $((2**i))s..."
-      sleep $((2**i))
-    done
-    echo "$HOME/.local/bin" >> $GITHUB_PATH
-    aptos --version
+        env:
+          GH_TOKEN: ${{ github.token }}       # токен для снятия rate limit
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          # ретрай, если API вернёт 403
+          for i in 0 1 2 3; do
+            if curl -sSL "https://aptos.dev/scripts/install_cli.py" | python3; then
+              break
+            fi
+            echo "Install failed, retry in $((2**i))s..."
+            sleep $((2**i))
+          done
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          aptos --version
+
       - name: Static sanity checks
         run: |
           set -euo pipefail
-          # 1) нет плейсхолдеров {{ADDR}} в коде проектов (игнорим build/, vendor/, .github/)
-          if grep -RIn --exclude-dir=build --exclude-dir=vendor --exclude-dir=.github '{{ADDR}}' mytoken escrow simplenft minimarket; then
+          # 1) нет плейсхолдеров {{ADDR}} (игнорим build/, vendor/, .github/)
+          if grep -RIn --exclude-dir=build --exclude-dir=vendor --exclude-dir=.github '{{ADDR}}' mytoken escrow simplenft minimarket paysplit vesting; then
             echo 'ERROR: found {{ADDR}} placeholders'; exit 1; fi
           # 2) в тестах не должно быть `use std::` (используем 0x1::)
-          if grep -RIn --include='*.move' --exclude-dir=build --exclude-dir=vendor --exclude-dir=.github 'use std::' mytoken/tests escrow/tests simplenft/tests minimarket/tests; then
+          if grep -RIn --include='*.move' --exclude-dir=build --exclude-dir=vendor --exclude-dir=.github 'use std::' mytoken/tests escrow/tests simplenft/tests minimarket/tests paysplit/tests vesting/tests; then
             echo 'ERROR: found std:: imports in tests; use 0x1::'; exit 1; fi
 
       - name: Repo-wide build & tests
