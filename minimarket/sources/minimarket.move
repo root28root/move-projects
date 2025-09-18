@@ -145,4 +145,26 @@ module minimarket::minimarket {
         buy(admin, admin_addr, 0, 10_000);
         withdraw_fees(admin, admin_addr);
     }
+
+    /// DEMO: init -> list -> buy -> withdraw_fees -> assert balance
+    public entry fun entry_demo(s: &signer) {
+        use std::signer;
+
+        let admin = signer::address_of(s);
+        // 2.5% комиссия
+        init(s, 250);
+
+        // Продавец = admin, товар #0 по цене 10_000
+        list(s, admin, 0, 10_000);
+
+        // Покупает тот же аккаунт (для простоты демо)
+        buy(s, admin, 0, 10_000);
+
+        // Админ=продавец забирает комиссию/выручку
+        withdraw_fees(s, admin);
+
+        // Проверяем итоговый баланс продавца
+        let bal = view_balance(admin, admin);
+        assert!(bal == 10_000, 0);
+    }
 }
