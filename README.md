@@ -5,8 +5,13 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 ![Move](https://img.shields.io/badge/Move-Aptos%2FSui-blue)
 
+[![Hire me](https://img.shields.io/badge/Hire%20me-Issue%20Form-0A66C2?logo=github)](https://github.com/root28root/move-projects/issues/new?template=hire-me.yml)
+[![Discord](https://img.shields.io/badge/Discord-@rootmhz__-5865F2?logo=discord&logoColor=white)](https://discord.com/users/1047911417396875264)
+[![Telegram](https://img.shields.io/badge/Telegram-@Nikolai__Rootmhz-229ED9?logo=telegram&logoColor=white)](https://t.me/Nikolai_Rootmhz)
+[![Email](https://img.shields.io/badge/Email-007rootmhz%40gmail.com-EA4335?logo=gmail&logoColor=white)](mailto:007rootmhz@gmail.com)
+
 **Hire me:** Move dev for Aptos/Sui — PoCs, mini-audits, porting logic to Move.  
-**DM:** @rootmhz • **Email:** 007rootmhz@gmail.com
+DM: @rootmhz / @Nikolai_Rootmhz • Email: 007rootmhz@gmail.com
 
 ---
 
