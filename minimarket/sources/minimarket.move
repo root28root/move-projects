@@ -137,19 +137,8 @@ module minimarket::minimarket {
         if (!found) { 0 } else { vector::borrow(&m.balances, idx).amount }
     }
 
-    /// Быстрый сценарий: init(2.5%), list(0,10_000), buy, withdraw_fees.
-    public entry fun entry_demo(admin: &signer) acquires Market {
-        init(admin, 250);
-        let admin_addr = signer::address_of(admin);
-        list(admin, admin_addr, 0, 10_000);
-        buy(admin, admin_addr, 0, 10_000);
-        withdraw_fees(admin, admin_addr);
-    }
-
-    /// DEMO: init -> list -> buy -> withdraw_fees -> assert balance
-    public entry fun entry_demo(s: &signer) {
-        use std::signer;
-
+        /// DEMO: init -> list -> buy -> withdraw_fees -> assert balance
+    
         let admin = signer::address_of(s);
         // 2.5% комиссия
         init(s, 250);
