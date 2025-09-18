@@ -1,3 +1,4 @@
+— See: [Changelog](./CHANGELOG.md)
 # Move Projects (Aptos Devnet)
 
 [![CI](https://github.com/root28root/move-projects/actions/workflows/move-ci.yml/badge.svg?branch=main)](https://github.com/root28root/move-projects/actions/workflows/move-ci.yml)
@@ -51,6 +52,4 @@ Deliver production-ready smart contracts on Move; contribute to Aptos/Sui (bount
 
 Need a PoC , mini-audit, or port to Move?
 DM @rootmhz • Email 007rootmhz@gmail.com
-
-— See: [Changelog](./CHANGELOG.md)
 
