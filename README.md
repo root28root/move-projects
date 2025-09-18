@@ -55,6 +55,12 @@ Move (Sui/Aptos), Rust basics, Git & GitHub, smart-contracts design, testing & d
 
 Deliver production-ready smart contracts on Move; contribute to Aptos/Sui (bounties, grants, collaborations).
 
-Need a PoC , mini-audit, or port to Move?
-DM @rootmhz • Email 007rootmhz@gmail.com
+## Need a PoC , mini-audit, or port to Move?
+
+## Contacts
+- Discord: [@rootmhz_](https://discord.com/users/1047911417396875264)
+- Telegram: [@Nikolai_Rootmhz](https://t.me/Nikolai_Rootmhz)
+- Email: [007rootmhz@gmail.com](mailto:007rootmhz@gmail.com)
+- Hire me: [issue form](https://github.com/root28root/move-projects/issues/new?template=hire-me.yml)
+
 
