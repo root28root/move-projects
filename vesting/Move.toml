@@ -1,12 +1,10 @@
 [package]
 name = "Vesting"
 version = "0.0.1"
-authors = ["Rootmhz"]
 
 [addresses]
 std = "0x1"
-Vesting = "0xb35962eed27b9a272d82673f2b7a99e7257b7b1a9af02c1a09143dacbaf498bd"
+Vesting = "0x225b149b3bfc3caabcbb7edf8c855636c0c00131226127e35545556aaf325278" # твой адрес
 
 [dependencies]
-# берём stdlib из вендора minimarket, как и в других подпроектах
 MoveStdlib = { local = "../minimarket/vendor/aptos-core/aptos-move/framework/move-stdlib" }
