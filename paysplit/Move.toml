@@ -1,0 +1,11 @@
+[package]
+name = "PaySplit"
+version = "0.0.1"
+authors = ["Rootmhz"]
+
+[addresses]
+std = "0x1"
+
+[dependencies]
+# Используем уже вендоренную stdlib из minimarket
+MoveStdlib = { local = "../minimarket/vendor/aptos-core/aptos-move/framework/move-stdlib" }
