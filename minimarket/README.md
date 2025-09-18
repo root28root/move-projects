@@ -15,3 +15,11 @@ cd minimarket
 aptos move compile
 aptos move publish --assume-yes
 aptos move run --function-id 0x225b149b3bfc3caabcbb7edf8c855636c0c00131226127e35545556aaf325278::minimarket::entry_demo
+
+
+---
+# Contacts:
+- Discord: [@rootmhz_](https://discord.com/users/1047911417396875264)
+- Telegram: [@Nikolai_Rootmhz](https://t.me/Nikolai_Rootmhz)
+- Email: [007rootmhz@gmail.com](mailto:007rootmhz@gmail.com)
+- Hire me: [issue form](https://github.com/root28root/move-projects/issues/new?template=hire-me.yml)
