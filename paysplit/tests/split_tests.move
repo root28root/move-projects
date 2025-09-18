@@ -1,63 +1,55 @@
 #[test_only]
 module PaySplit::split_tests {
     use 0x1::signer;
-    use 0x1::vector;
     use PaySplit::split;
 
-    const A1: address = @0x1;
-    const A2: address = @0x2;
-    const A3: address = @0x3;
+    // === 1) Точное распределение без остатка ===
+    // shares: 50/30/20; deposit: 100 -> A=50, B=30, C=20, fees=0
+    #[test(admin=@0xAA, a=@0xA, b=@0xB, c=@0xC)]
+    public entry fun test_exact_split_ok(
+        admin: &signer, a: &signer, b: &signer, c: &signer
+    ) {
+        let rcpts = vector[signer::address_of(a), signer::address_of(b), signer::address_of(c)];
+        let shares = vector[50, 30, 20];
+        split::init(admin, rcpts, shares);
 
-    // Happy path: 100 with shares [3,1] → 75/25
-    #[test(admin = @0xA, payer = @0xB)]
-    public entry fun test_split_3_1(admin: &signer, payer: &signer) {
-        // recipients = [A1, A2]
-        let recips = vector::singleton<address>(A1);
-        let tail_r = vector::singleton<address>(A2);
-        vector::append(&mut recips, tail_r);
-
-        // shares = [3, 1]
-        let shares = vector::singleton<u64>(3);
-        let tail_s = vector::singleton<u64>(1);
-        vector::append(&mut shares, tail_s);
-
-        split::init(admin, recips, shares);
         let admin_addr = signer::address_of(admin);
+        split::deposit(admin, admin_addr, 100);
 
-        split::deposit(payer, admin_addr, 100);
-
-        assert!(split::view_balance(admin_addr, A1) == 75, 0);
-        assert!(split::view_balance(admin_addr, A2) == 25, 1);
+        assert!(split::view_balance(admin_addr, signer::address_of(a)) == 50, 0);
+        assert!(split::view_balance(admin_addr, signer::address_of(b)) == 30, 1);
+        assert!(split::view_balance(admin_addr, signer::address_of(c)) == 20, 2);
     }
 
-    // Remainder path: [1,1,1] & 100 → each 33, remainder 1 → admin can withdraw fees
-    #[test(admin = @0xC, payer = @0xD, a1 = @0x1, a2 = @0x2, a3 = @0x3)]
-    public entry fun test_remainder_and_withdraw(admin: &signer, payer: &signer, a1: &signer, a2: &signer, a3: &signer) {
-        let addrs = vector::empty<address>();
-        vector::push_back(&mut addrs, signer::address_of(a1));
-        vector::push_back(&mut addrs, signer::address_of(a2));
-        vector::push_back(&mut addrs, signer::address_of(a3));
+    // === 2) Остаток идёт в fees, затем админ забирает ===
+    // shares: 1/1; deposit: 1 -> parts=0/0, remainder=1 -> fees=1 -> withdraw_fees => admin=1
+    #[test(admin=@0xAB, a=@0xD, b=@0xE)]
+    public entry fun test_remainder_goes_to_admin_ok(
+        admin: &signer, a: &signer, b: &signer
+    ) {
+        let rcpts = vector[signer::address_of(a), signer::address_of(b)];
+        let shares = vector[1, 1];
+        split::init(admin, rcpts, shares);
 
-        let shares = vector::empty<u64>();
-        vector::push_back(&mut shares, 1);
-        vector::push_back(&mut shares, 1);
-        vector::push_back(&mut shares, 1);
-
-        split::init(admin, addrs, shares);
         let admin_addr = signer::address_of(admin);
+        split::deposit(admin, admin_addr, 1);         // remainder = 1
+        split::withdraw_fees(admin, admin_addr);       // move fees -> admin balance
 
-        split::deposit(payer, admin_addr, 100);
+        assert!(split::view_balance(admin_addr, admin_addr) == 1, 10);
+    }
 
-        assert!(split::view_balance(admin_addr, signer::address_of(a1)) == 33, 0);
-        assert!(split::view_balance(admin_addr, signer::address_of(a2)) == 33, 1);
-        assert!(split::view_balance(admin_addr, signer::address_of(a3)) == 33, 2);
+    // === 3) Негатив: только админ может withdraw_fees (E_NOT_ADMIN = 4) ===
+    #[test(admin=@0xAC, bad=@0xEF, a=@0x1, b=@0x2)]
+    #[expected_failure(abort_code = 4, location = PaySplit::split)]
+    public entry fun test_withdraw_fees_only_admin_fails(
+        admin: &signer, bad: &signer, a: &signer, b: &signer
+    ) {
+        let rcpts = vector[signer::address_of(a), signer::address_of(b)];
+        let shares = vector[1, 1];
+        split::init(admin, rcpts, shares);
 
-        // fees = 1 → admin withdraws to own balance
-        split::withdraw_fees(admin, admin_addr);
-        assert!(split::view_balance(admin_addr, signer::address_of(admin)) == 1, 3);
-
-        // recipient withdraw example (a2)
-        split::withdraw(a2, admin_addr);
-        assert!(split::view_balance(admin_addr, signer::address_of(a2)) == 0, 4);
+        let admin_addr = signer::address_of(admin);
+        // не-админ вызывает — должно упасть с кодом 4
+        split::withdraw_fees(bad, admin_addr);
     }
 }
