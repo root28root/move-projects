@@ -137,8 +137,8 @@ module minimarket::minimarket {
         if (!found) { 0 } else { vector::borrow(&m.balances, idx).amount }
     }
 
-            /// DEMO: init -> list -> buy -> withdraw_fees -> assert balance
-    public entry fun entry_demo(s: &signer) {
+    /// DEMO: init -> list -> buy -> withdraw_fees -> assert balance
+    public entry fun entry_demo(s: &signer) acquires Market {
         let admin = signer::address_of(s);
         // 2.5% комиссия
         init(s, 250);
