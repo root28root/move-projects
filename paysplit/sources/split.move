@@ -5,6 +5,7 @@ module PaySplit::split {
     const E_ALREADY_INIT: u64 = 1;
     const E_EMPTY: u64 = 2;
     const E_LEN_MISMATCH: u64 = 3;
+    const E_NOT_ADMIN: u64 = 4;
 
     struct Balance has drop, store {
         owner: address,
@@ -104,7 +105,7 @@ module PaySplit::split {
     public entry fun withdraw_fees(admin: &signer, admin_addr: address) acquires Splitter {
         let caller = signer::address_of(admin);
         let s = borrow_global_mut<Splitter>(admin_addr);
-        assert!(s.admin == caller, E_ALREADY_INIT); // reuse code: !=admin ⇒ fail
+        assert!(s.admin == caller, E_NOT_ADMIN);
 
         let f = s.fees_accumulated;
         if (f > 0) {
