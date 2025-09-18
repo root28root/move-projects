@@ -1,5 +1,26 @@
 — See: [Changelog](./CHANGELOG.md)
 # Move Projects (Aptos Devnet)
+<p align="center">
+  <a href="https://github.com/root28root/move-projects/actions">
+    <img alt="CI" src="https://img.shields.io/github/actions/workflow/status/root28root/move-projects/move-ci.yml?label=CI&logo=github" />
+  </a>
+  <a href="https://github.com/root28root/move-projects/releases">
+    <img alt="Release" src="https://img.shields.io/github/v/tag/root28root/move-projects?label=release&logo=semver" />
+  </a>
+  <a href="https://github.com/root28root/move-projects/blob/main/LICENSE">
+    <img alt="License" src="https://img.shields.io/badge/license-MIT-blue.svg" />
+  </a>
+  <a href="https://discord.com/users/1047911417396875264">
+    <img alt="Discord" src="https://img.shields.io/badge/discord-@rootmhz__-5865F2?logo=discord&logoColor=white" />
+  </a>
+  <a href="https://t.me/Nikolai_Rootmhz">
+    <img alt="Telegram" src="https://img.shields.io/badge/telegram-@Nikolai__Rootmhz-229ED9?logo=telegram&logoColor=white" />
+  </a>
+  <a href="https://github.com/root28root/move-projects/issues/new?template=hire-me.yml">
+    <img alt="Hire" src="https://img.shields.io/badge/Hire_me-issue_form-success?logo=github" />
+  </a>
+</p>
+
 
 [![CI](https://github.com/root28root/move-projects/actions/workflows/move-ci.yml/badge.svg?branch=main)](https://github.com/root28root/move-projects/actions/workflows/move-ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
