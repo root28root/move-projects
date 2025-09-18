@@ -118,6 +118,11 @@ module PaySplit::split {
     public fun view_balance(admin_addr: address, owner: address): u64 acquires Splitter {
         let s = borrow_global<Splitter>(admin_addr);
         let (found, idx) = find_balance_index(&s.balances, owner);
-        if (!found) 0 else (*vector::borrow(&s.balances, idx)).amount
+        if (!found) {
+            0
+        } else {
+            let b = vector::borrow(&s.balances, idx);
+            b.amount
+        }
     }
 }
