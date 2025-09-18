@@ -27,3 +27,11 @@ sui move test
 
 - Publish tx: https://explorer.aptoslabs.com/txn/0xa40edb103423fee591d4947cb15843af4513cfb4b45a9275faa6ea444f2d74d8?network=devnet
 - Demo tx (entry_demo): https://explorer.aptoslabs.com/txn/0x1f0cadf053ac26b3775a9585b53a88c480cd0a3f6d8b9f979a9fb98bae2acdab?network=devnet
+
+
+---
+# Contacts:
+- Discord: [@rootmhz_](https://discord.com/users/1047911417396875264)
+- Telegram: [@Nikolai_Rootmhz](https://t.me/Nikolai_Rootmhz)
+- Email: [007rootmhz@gmail.com](mailto:007rootmhz@gmail.com)
+- Hire me: [issue form](https://github.com/root28root/move-projects/issues/new?template=hire-me.yml)
