@@ -26,7 +26,7 @@ module 0xb35962eed27b9a272d82673f2b7a99e7257b7b1a9af02c1a09143dacbaf498bd::vesti
     // Негатив: клеймит не бенефициар -> E_NOT_BENEFICIARY = 4
     #[test(admin = @0xA, ben = @0xB)]
     #[expected_failure(abort_code = 4, location = Vesting::vesting)]
-    public entry fun test_wrong_beneficiary_fails(admin: &signer, ben: &signer) {
+    public entry fun test_wrong_beneficiary_fails(admin: &signer, _ben: &signer) {
         let admin_addr = @0xA;
         let ben_addr = @0xB;
 
