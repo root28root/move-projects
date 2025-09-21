@@ -25,7 +25,7 @@ Move dev (Aptos-first, Sui-friendly). Real contracts with deployments & tests.
 | **Escrow** | [`escrow/`](escrow) | `0xd7e2ec7644357e389586b3d8b838d2035e510b36f81a583bdd14f248a7daf1ce` | `0xc9bf98c9990ed8d5373774fdd0d1c0987064cc5d406f7e1576c6688643c07f4b` |
 | **SimpleNFT** | [`simplenft/`](simplenft) | `0xfe1cbd0b4514deb3c529aee2286a35f3f3f5f177acc7867dcfa428f48305bec4` | `0x279c2d6adcc180f572329e253077f65f9c792cb14a5e9e49b6346540585754f2` |
 | **MiniMarketplace** | [`minimarket/`](minimarket) | `0x2143c7502fb75afc1dfe4bd4cf316188fc8656dc4e997e13108c22d3cc770a46` | `0xda2fb28c29d037406aa658a0b5e4e69514d663c22975011674d95a4aec20703f` |
-| **Vesting** |         [`Vesting/`](vesting) | `0x225b149b3bfc3caabcbb7edf8c855636c0c00131226127e35545556aaf325278` | `0xc74e87de5fc517fb766a257d9298fa681a395db187bec111121c0f57c6d7b4f8` |
+| **Vesting** |         [`vesting/`](vesting) | `0x225b149b3bfc3caabcbb7edf8c855636c0c00131226127e35545556aaf325278` | `0xc74e87de5fc517fb766a257d9298fa681a395db187bec111121c0f57c6d7b4f8` |
 
 ## 📂 Current Projects
 - MyToken — basic token contract with mint/transfer/burn  
@@ -57,6 +57,7 @@ Move (Sui/Aptos), Rust basics, Git & GitHub, smart-contracts design, testing & d
 Deliver production-ready smart contracts on Move; contribute to Aptos/Sui (bounties, grants, collaborations).
 
 ## Need a PoC , mini-audit, or port to Move?
+DM @rootmhz • Email 007rootmhz@gmail.com • Hire: issues/new?template=hire-me.yml
 
 ## Contacts
 - Discord: [@rootmhz_](https://discord.com/users/1047911417396875264)
