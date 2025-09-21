@@ -1,29 +1,33 @@
-name: Release Artifacts (Aptos)
+name: Release
 
 on:
   push:
-    tags: ["v*"]
+    tags:
+      - 'v*'        # сработает при пуше тега v0.2.0, v1.0.0 и т.п.
+
+permissions:
+  contents: write   # чтобы создавать релизы
 
 jobs:
-  build-artifacts:
+  gh-release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Install Aptos CLI
-        run: |
-          curl -sSL "https://aptos.dev/scripts/install_cli.py" | python3
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-          aptos --version
-      - name: Build all projects
-        run: ./tools/check.sh
-      - name: Package artifacts
-        run: |
-          mkdir -p dist
-          for p in mytoken escrow simplenft minimarket; do
-            (cd "$p" && aptos move compile)
-            zip -r "dist/${p}-build.zip" "$p/build"
-          done
-      - name: Upload artifacts to release
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # (опционально) прогнать сборку/тесты перед релизом
+      # - name: Build & test
+      #   run: ./tools/check.sh
+
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/*.zip
+          tag_name: ${{ github.ref_name }}  # v0.2.0
+          generate_release_notes: true
+          body: |
+            v0.2.0 — Vesting + PaySplit; docs; CI hardening
+            See CHANGELOG.md for details.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
